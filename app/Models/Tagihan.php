@@ -21,4 +21,9 @@ class Tagihan extends Model
         'isDeleted',
         'deletedAt'
     ];
+
+    protected $casts = [
+        'pakaiPajak' => 'boolean',
+        'isDeleted' => 'boolean',
+    ];
 }
