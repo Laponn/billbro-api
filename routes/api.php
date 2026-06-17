@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/tagihan', [TagihanController::class, 'index']);
 Route::post('/tagihan', [TagihanController::class, 'store']);
+Route::put('/tagihan/soft-delete/{id}', [TagihanController::class, 'softDelete']);
