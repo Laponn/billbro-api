@@ -49,4 +49,33 @@ class TagihanController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);
     }
+
+    public function update(Request $request, $id)
+    {
+        $tagihan = Tagihan::find($id);
+        if (!$tagihan) {
+            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);
+        }
+
+        $validated = $request->validate([
+            'namaTagihan' => 'required|string',
+            'totalTagihan' => 'required|numeric',
+            'jumlahOrang' => 'required|integer',
+            'pakaiPajak' => 'required|boolean',
+            'persentasePajak' => 'required|numeric',
+            'hasilPerOrang' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $fileName);
+            $validated['imageId'] = pathinfo($fileName, PATHINFO_FILENAME);
+        }
+
+        $tagihan->update($validated);
+
+        return response()->json(['status' => 'success', 'data' => $tagihan], 200);
+    }
 }
